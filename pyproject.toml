@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "local-pyspark-testing"
+version = "0.1.0"
+description = "Demo project for local PySpark testing with Databricks"
+requires-python = ">=3.11"
+dependencies = [
+    "pyspark>=4.0.0",
+    "pycountry>=24.6.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.4.0",
+]
+
+[project.entry-points."databricks.jobs"]
+bronze_to_silver = "local_pyspark_testing.jobs.bronze_to_silver:main"
+silver_to_gold = "local_pyspark_testing.jobs.silver_to_gold:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/local_pyspark_testing"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
