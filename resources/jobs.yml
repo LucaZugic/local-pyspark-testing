@@ -22,7 +22,7 @@ resources:
       job_clusters:
         - job_cluster_key: demo
           new_cluster:
-            spark_version: 17.3.x-scala2.12
+            spark_version: 17.3.x-scala2.13
             num_workers: 0
             node_type_id: Standard_F4
             docker_image:
