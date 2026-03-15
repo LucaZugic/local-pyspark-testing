@@ -1,0 +1,31 @@
+{
+  "name": "local-pyspark-testing",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "options": ["--platform=linux/amd64"],
+    "args": {
+      "INSTALL_MODE": "dev"
+    }
+  },
+  "runArgs": ["--platform=linux/amd64", "--name=local-pyspark-testing"],
+  "containerEnv": {
+    "LOCAL_SPARK": "true"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "charliermarsh.ruff",
+        "ms-python.vscode-pylance"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.testing.pytestEnabled": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "charliermarsh.ruff"
+      }
+    }
+  },
+  "postCreateCommand": "apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/* && uv pip install --system --break-system-packages -e '.[dev]'",
+  "remoteUser": "root"
+}
