@@ -14,4 +14,4 @@ resources:
         ResourceClass: SingleNode
       azure_attributes:
         availability: ON_DEMAND_AZURE
-      autotermination_minutes: 30
+      autotermination_minutes: 10
