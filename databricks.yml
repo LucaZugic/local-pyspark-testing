@@ -1,0 +1,20 @@
+bundle:
+  name: local-pyspark-testing
+
+variables:
+  image_tag:
+    description: "Docker image tag (git SHA or version) - required"
+  ghcr_registry:
+    description: "GitHub Container Registry URL"
+    default: "ghcr.io/lucazugic/local-pyspark-testing"
+  databricks_host:
+    description: "Databricks workspace URL"
+    default: "https://adb-7405617259881941.1.azuredatabricks.net"
+
+include:
+  - resources/*.yml
+
+targets:
+  default:
+    workspace:
+      host: ${var.databricks_host}

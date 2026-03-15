@@ -1,0 +1,14 @@
+resources:
+  clusters:
+    demo:
+      cluster_name: "demo"
+      spark_version: 17.3.x-scala2.12
+      num_workers: 0
+      node_type_id: Standard_F4
+      docker_image:
+        url: "${var.ghcr_registry}:${var.image_tag}"
+      spark_conf:
+        spark.databricks.cluster.profile: serverless
+      azure_attributes:
+        availability: ON_DEMAND_AZURE
+      autotermination_minutes: 30
