@@ -8,7 +8,8 @@ resources:
       docker_image:
         url: "${var.ghcr_registry}:${var.image_tag}"
       spark_conf:
-        spark.databricks.cluster.profile: serverless
+        spark.databricks.cluster.profile: singleNode
+        spark.master: "local[*]"
       azure_attributes:
         availability: ON_DEMAND_AZURE
       autotermination_minutes: 30
