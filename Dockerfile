@@ -12,10 +12,10 @@ WORKDIR /app
 COPY dist/*.whl* ./
 
 # Install based on mode:
-# - wheel: install pre-built wheel (CI)
+# - wheel: install pre-built wheel + pytest for CI testing
 # - dev: skip, postCreateCommand handles it
 RUN if [ "$INSTALL_MODE" = "wheel" ]; then \
-      uv pip install --system --break-system-packages *.whl && rm -f *.whl; \
+      uv pip install --system --break-system-packages *.whl pytest && rm -f *.whl; \
     fi
 
 # Copy test files and config (needed for CI test runs)
