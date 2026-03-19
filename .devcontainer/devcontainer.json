@@ -1,5 +1,6 @@
 {
   "name": "local-pyspark-testing",
+  "initializeCommand": "mkdir -p dist",
   "build": {
     "dockerfile": "../Dockerfile",
     "options": ["--platform=linux/amd64"],

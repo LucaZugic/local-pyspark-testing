@@ -8,16 +8,16 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 # Set working directory
 WORKDIR /app
 
-# Copy wheel if present (CI build)
-COPY dist/*.whl* ./
+# Copy project files (dist/ created by initializeCommand in dev, by CI in wheel mode)
+COPY pyproject.toml ./
+COPY dist/ ./dist/
 
 # Install based on mode:
 # - wheel: install pre-built wheel + pytest for CI testing
-# - dev: skip, postCreateCommand handles it
+# - dev: skip, postCreateCommand handles editable install
 RUN if [ "$INSTALL_MODE" = "wheel" ]; then \
-      uv pip install --system --break-system-packages *.whl pytest && rm -f *.whl; \
+      uv pip install --system --break-system-packages ./dist/*.whl pytest && rm -rf dist/; \
     fi
 
-# Copy test files and config (needed for CI test runs)
+# Copy test files (needed for CI test runs)
 COPY tests ./tests
-COPY pyproject.toml ./
