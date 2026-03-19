@@ -40,3 +40,30 @@ docker exec -w /workspaces/local-pyspark-testing local-pyspark-testing pytest
 ruff check .
 ruff format .
 ```
+
+## Development Workflow
+
+### TDD with Claude Code
+
+When asked to implement a new feature or fix a bug, follow strict TDD:
+
+1. **Write the failing test first** - Propose a test that captures the expected behaviour
+2. **Run the test to confirm it fails** - `LOCAL_SPARK=true uv run pytest -v`
+3. **Implement the minimal code** to make the test pass
+4. **Run the test to confirm it passes**
+5. **Refactor if needed** - with the safety net of passing tests
+
+Always run tests locally before suggesting the work is complete.
+
+### Testing Commands
+
+```bash
+# Run tests via devcontainer (from host)
+docker exec -w /workspaces/local-pyspark-testing local-pyspark-testing pytest -v
+
+# Run specific test file
+docker exec -w /workspaces/local-pyspark-testing local-pyspark-testing pytest tests/test_transforms.py -v
+
+# Run tests matching a pattern
+docker exec -w /workspaces/local-pyspark-testing local-pyspark-testing pytest -v -k "country"
+```
