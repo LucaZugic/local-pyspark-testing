@@ -2,6 +2,8 @@
 
 A demonstration project for the Manchester Databricks User Group showing how to run local unit tests using the official Databricks Runtime Docker image.
 
+![Architecture](./docs/architecture.png)
+
 ## Why?
 
 Testing PySpark code locally with the exact same runtime as production ensures:
