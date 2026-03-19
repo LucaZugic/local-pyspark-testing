@@ -213,3 +213,10 @@ derby.log
 
 # OS
 .DS_Store
+
+# Local development settings
+.claude
+.vscode
+
+# Drawio
+*.drawio.bkp
