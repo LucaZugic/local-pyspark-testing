@@ -2,38 +2,58 @@ resources:
   jobs:
     demo_pipeline:
       name: "demo-pipeline"
-      description: "Sample workflow demonstrating custom Docker image on job clusters"
+      description: "Sample workflow demonstrating custom Docker image"
 
       tasks:
+        # Using classic compute (existing cluster) - faster for demos as cluster can be pre-warmed
         - task_key: bronze_to_silver
-          job_cluster_key: demo_job_compute
+          existing_cluster_id: ${resources.clusters.demo_classic_compute.cluster_id}
           python_wheel_task:
             package_name: local_pyspark_testing
             entry_point: bronze_to_silver
 
         - task_key: silver_to_gold
-          job_cluster_key: demo_job_compute
+          existing_cluster_id: ${resources.clusters.demo_classic_compute.cluster_id}
           depends_on:
             - task_key: bronze_to_silver
           python_wheel_task:
             package_name: local_pyspark_testing
             entry_point: silver_to_gold
 
-      job_clusters:
-        - job_cluster_key: demo_job_compute
-          new_cluster:
-            spark_version: 17.3.x-scala2.13
-            num_workers: 0
-            node_type_id: Standard_F4
-            docker_image:
-              url: "${var.ghcr_registry}:${var.image_tag}"
-            spark_conf:
-              spark.databricks.cluster.profile: singleNode
-              spark.master: "local[*]"
-            custom_tags:
-              ResourceClass: SingleNode
-            azure_attributes:
-              availability: ON_DEMAND_AZURE
+        # Alternative: Using job compute (ephemeral cluster) - recommended for production
+        # Job clusters spin up fresh for each run, ensuring isolation and clean state.
+        # Trade-off: cold start vs using a pre-warmed classic cluster.
+        #
+        # - task_key: bronze_to_silver
+        #   job_cluster_key: demo_job_compute
+        #   python_wheel_task:
+        #     package_name: local_pyspark_testing
+        #     entry_point: bronze_to_silver
+        #
+        # - task_key: silver_to_gold
+        #   job_cluster_key: demo_job_compute
+        #   depends_on:
+        #     - task_key: bronze_to_silver
+        #   python_wheel_task:
+        #     package_name: local_pyspark_testing
+        #     entry_point: silver_to_gold
+
+      # Job cluster definition - uncomment if using job compute above
+      # job_clusters:
+      #   - job_cluster_key: demo_job_compute
+      #     new_cluster:
+      #       spark_version: 17.3.x-scala2.13
+      #       num_workers: 0
+      #       node_type_id: Standard_F4
+      #       docker_image:
+      #         url: "${var.ghcr_registry}:${var.image_tag}"
+      #       spark_conf:
+      #         spark.databricks.cluster.profile: singleNode
+      #         spark.master: "local[*]"
+      #       custom_tags:
+      #         ResourceClass: SingleNode
+      #       azure_attributes:
+      #         availability: ON_DEMAND_AZURE
 
       schedule:
         pause_status: PAUSED

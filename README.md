@@ -95,6 +95,17 @@ def test_converts_valid_codes(self, spark_session):
     assertDataFrameEqual(result, expected)
 ```
 
+## Compute Options
+
+The job can run on either **classic compute** (existing cluster) or **job compute** (ephemeral cluster):
+
+| Option | Startup Time | Use Case |
+|--------|--------------|----------|
+| Classic compute | Near-instant if pre-warmed | Demos, development, interactive work |
+| Job compute | Longer (cold start) | Production workloads requiring isolation |
+
+See `resources/jobs.yml` for both configurations - the job compute version is commented out but ready to use.
+
 ## Configuration
 
 ### GitHub Secrets Required
