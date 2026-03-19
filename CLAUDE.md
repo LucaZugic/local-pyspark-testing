@@ -48,7 +48,7 @@ ruff format .
 When asked to implement a new feature or fix a bug, follow strict TDD:
 
 1. **Write the failing test first** - Propose a test that captures the expected behaviour
-2. **Run the test to confirm it fails** - `LOCAL_SPARK=true uv run pytest -v`
+2. **Run the test to confirm it fails**
 3. **Implement the minimal code** to make the test pass
 4. **Run the test to confirm it passes**
 5. **Refactor if needed** - with the safety net of passing tests
@@ -57,7 +57,12 @@ Always run tests locally before suggesting the work is complete.
 
 ### Testing Commands
 
+Tests must run inside the devcontainer. If the container is not running, start it first:
+
 ```bash
+# Start the devcontainer if not running
+docker start local-pyspark-testing
+
 # Run tests via devcontainer (from host)
 docker exec -w /workspaces/local-pyspark-testing local-pyspark-testing pytest -v
 
