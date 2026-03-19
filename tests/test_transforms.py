@@ -26,6 +26,39 @@ class TestCountryCodeToName:
 
         assertDataFrameEqual(result, expected)
 
+    def test_converts_xs_to_scousia(self, spark_session):
+        df = spark_session.createDataFrame([("XS",)], ["country_code"])
+        expected = spark_session.createDataFrame(
+            [("XS", "Scousia")],
+            ["country_code", "country_name"],
+        )
+
+        result = df.withColumn("country_name", country_code_to_name("country_code"))
+
+        assertDataFrameEqual(result, expected)
+
+    def test_converts_lowercase_xs_to_scousia(self, spark_session):
+        df = spark_session.createDataFrame([("xs",)], ["country_code"])
+        expected = spark_session.createDataFrame(
+            [("xs", "Scousia")],
+            ["country_code", "country_name"],
+        )
+
+        result = df.withColumn("country_name", country_code_to_name("country_code"))
+
+        assertDataFrameEqual(result, expected)
+
+    def test_converts_mixed_case_xs_to_scousia(self, spark_session):
+        df = spark_session.createDataFrame([("Xs",)], ["country_code"])
+        expected = spark_session.createDataFrame(
+            [("Xs", "Scousia")],
+            ["country_code", "country_name"],
+        )
+
+        result = df.withColumn("country_name", country_code_to_name("country_code"))
+
+        assertDataFrameEqual(result, expected)
+
     def test_handles_lowercase(self, spark_session):
         df = spark_session.createDataFrame([("gb",)], ["country_code"])
         expected = spark_session.createDataFrame(
@@ -71,6 +104,31 @@ class TestCountryNameToCode:
         )
         expected = spark_session.createDataFrame(
             [("United Kingdom", "GB"), ("Germany", "DE")],
+            ["country_name", "country_code"],
+        )
+
+        result = df.withColumn("country_code", country_name_to_code("country_name"))
+
+        assertDataFrameEqual(result, expected)
+
+    def test_converts_scousia_to_xs(self, spark_session):
+        df = spark_session.createDataFrame([("Scousia",)], ["country_name"])
+        expected = spark_session.createDataFrame(
+            [("Scousia", "XS")],
+            ["country_name", "country_code"],
+        )
+
+        result = df.withColumn("country_code", country_name_to_code("country_name"))
+
+        assertDataFrameEqual(result, expected)
+
+    def test_converts_scousia_case_insensitive(self, spark_session):
+        df = spark_session.createDataFrame(
+            [("scousia",), ("SCOUSIA",), ("ScOuSiA",)],
+            ["country_name"],
+        )
+        expected = spark_session.createDataFrame(
+            [("scousia", "XS"), ("SCOUSIA", "XS"), ("ScOuSiA", "XS")],
             ["country_name", "country_code"],
         )
 
